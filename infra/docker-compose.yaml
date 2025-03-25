@@ -1,0 +1,44 @@
+version: "3"
+services:
+  mongo-express:
+    image: mongo-express
+    container_name: seiyo.mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: seiyo.123
+      ME_CONFIG_MONGODB_PORT: 27017
+    links:
+      - mongo
+    networks:
+      - seiyo-mongo-network
+
+  mongo:
+    image: mongo
+    container_name: seiyo.mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - seiyo_mongo_data:/data/db
+    networks:
+      - seiyo-mongo-network
+  
+  rabbitmq:
+    container_name: seiyo.rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+
+networks: 
+  seiyo-mongo-network:
+    driver: bridge
+
+volumes:
+  seiyo_mongo_data:
+    external: true
