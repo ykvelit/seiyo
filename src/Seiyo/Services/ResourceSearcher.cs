@@ -12,7 +12,7 @@ public class ResourceSearcher(IEmbeddingGenerator generator, IMongoDatabase data
         var vectorOptions = new VectorSearchOptions<Resource>
         {
             IndexName = "vector_index",
-            NumberOfCandidates = 150
+            NumberOfCandidates = 30
         };
 
         var resources = database.GetCollection<Resource>("resources");
@@ -21,11 +21,17 @@ public class ResourceSearcher(IEmbeddingGenerator generator, IMongoDatabase data
             .Include(x => x.Id)
             .Include(x => x.DisplayName)
             .Include(x => x.Description)
-            .Include(x => x.Type);
+            .Include(x => x.Type)
+            .MetaVectorSearchScore(x => x.Score)
+            ;
+
+        var filter = Builders<Resource>.Filter
+            .Gt(x => x.Score, 0.7);
 
         var movies = await resources.Aggregate()
-            .VectorSearch(movie => movie.Embedding, embedding, 150, vectorOptions)
+            .VectorSearch(movie => movie.Embedding, embedding, 10, vectorOptions)
             .Project<Resource>(projection)
+            .Match(filter)
             .ToListAsync(cancellationToken);
 
         return movies;

@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <NoDefaultLaunchSettingsFile>True</NoDefaultLaunchSettingsFile>
+        <UserSecretsId>26e29a65-8261-4bc8-bb61-b096cfdf090b</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

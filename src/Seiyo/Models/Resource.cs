@@ -18,4 +18,6 @@ public class Resource
     [BsonElement("businessObject")] public BusinessObject BusinessObject { get; set; } = null!;
 
     [BsonElement("embedding")] public double[] Embedding { get; set; } = [];
+    
+    public double Score { get; set; }
 }
